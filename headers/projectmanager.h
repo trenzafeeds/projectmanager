@@ -10,12 +10,14 @@
  * guthrie@marlboro.edu
  ****************************/
 
-/* Sub-headers */
-#include 'utils.h'
-#include 'newproject.h'
-
 /* Standards */
 #include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <string.h>
+
+/* Local libaries */
+#include 'utils.h'
 
 /* Define for debugging */
 #define DEBUG
@@ -25,5 +27,7 @@
 
 #define TRUE 1
 #define FALSE 0
+
+#define MAN "MANUAL ENTRY HERE"
 
 #endif /* PMHEADER */
