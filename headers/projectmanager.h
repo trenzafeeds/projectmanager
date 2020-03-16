@@ -20,7 +20,11 @@
 #include 'utils.h'
 
 /* Define for debugging */
-#define DEBUG
+// #define DEBUG
+
+/* Define filepaths */
+// #define PM_PATH
+// #define CONF_PATH
 
 #ifndef PMHEADER
 #define PMHEADER

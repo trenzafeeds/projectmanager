@@ -18,11 +18,12 @@ struct _conf {
 };
 #define CONF_SIZE sizeof(struct _conf);
 
-void print_error(char *msg);
-void app_error(char *msg, int exit);
+conf conf_struct();
+conf load_config(char *cpath);
 
 FILE *open_file(char *fpath, char *action);
 
-conf load_config(char *cpath); 
+void print_error(char *msg);
+void app_error(char *msg, int exit);
 
 #endif /* UTILS_HEADER */
