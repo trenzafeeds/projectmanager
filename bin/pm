@@ -1,1 +1,34 @@
 #!/bin/bash
+
+# Path to symlink created by install script
+exe_path=/usr/local/lib/projectmanager/
+
+case $1 in
+
+    # Functions
+
+    # Meta utilities
+    -c | --config)
+	if [ -z $2 ]
+	then
+	    echo "Enter path to config as second argument."
+	    exit
+	else
+	    ${exe_path}bin/config $2
+	fi
+	;;
+
+    # Manual functions
+    "")
+	echo "-- project manager requires arguments --"
+	cat /usr/local/lib/projectmanager/doc/manual
+	exit
+	;;
+    
+    --dump_config)
+	cat ${exe_path}config.conf
+	exit
+	;;
+    
+esac
+
