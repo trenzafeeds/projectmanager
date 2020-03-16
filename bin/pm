@@ -5,6 +5,13 @@ exe_path=/usr/local/lib/projectmanager/
 
 case $1 in
 
+    # No arguments
+    "")
+	echo "-- project manager requires arguments --"
+	cat ${exe_path}doc/manual
+	exit
+	;;
+
     # Functions
 
     # Meta utilities
@@ -14,19 +21,13 @@ case $1 in
 	    echo "Enter path to config as second argument."
 	    exit
 	else
-	    ${exe_path}bin/config $2
+	    python2 ${exe_path}bin/config.py $2
 	fi
 	;;
 
     # Manual functions
-    "")
-	echo "-- project manager requires arguments --"
-	cat /usr/local/lib/projectmanager/doc/manual
-	exit
-	;;
-    
     --dump_config)
-	cat ${exe_path}config.conf
+	cat ${exe_path}doc/config.conf
 	exit
 	;;
     
