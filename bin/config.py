@@ -5,6 +5,8 @@ config.py
 import sys, os
 import ConfigParser as parser
 
+headerstring = "# .tmp/iconf\n#\n# Internal configuration file for projectmanager\n# DO NOT TOUCH\n\n"
+
 def parse(path):
     config_parsed = parser.ConfigParser()
     try:
@@ -12,9 +14,42 @@ def parse(path):
     except:
         print "Error reading configuration file at", path
         exit(1)
+    return config_parsed
 
+def post_parse(config_obj):
+    config_dict = {'modes':{}}
+    for section in config_obj.sections():
+        if section[0:5] == 'mode/':
+            config_dict['modes'][section[5:]] = config_obj.items(section)
+        else:
+            config_dict[section] = config_obj.items(section)
+    return config_dict
+
+def print_values(dict_item):
+    for values in dict_item:
+        print "{} = {}".format(values[0], values[1])
+    print "--"
+
+def print_rest(config_dict):
+    for section in config_dict.keys():
+        if (section != 'settings') and (section != 'modes'):
+            print "% {}".format(section)
+            print_values(config_dict[section])
+        elif section == 'modes':
+            for mode in config_dict['modes'].keys():
+                print "%% {}".format(mode)
+                print_values(config_dict['modes'][mode])
+        elif section == 'settings':
+            pass
+
+def dump_config(config_dict):
+    print headerstring
+    print "%%% settings"
+    print_values(config_dict['settings'])
+    print_rest(config_dict)
+    
 def main(conf_path):
-    parse(conf_path)
+    dump_config(post_parse(parse(conf_path))) 
 
 if __name__ == "__main__":
 

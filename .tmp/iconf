@@ -1,0 +1,22 @@
+# .tmp/iconf
+#
+# Internal configuration file for projectmanager
+# DO NOT TOUCH
+
+
+%%% settings
+git = false
+git_readme = true
+git_ignore = true
+git_first_commit = true
+--
+%% c
+git = true
+headers = dir
+bin = dir
+src = dir
+makefile = empty
+--
+%% math
+work.tex = /home/trenza/texform.tex
+--
