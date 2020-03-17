@@ -5,7 +5,7 @@ config.py
 import sys, os
 import ConfigParser as parser
 
-headerstring = "# .tmp/iconf\n#\n# Internal configuration file for projectmanager\n# DO NOT TOUCH\n\n"
+headerstring = "# .tmp/iconf\n#\n# Internal configuration file for projectmanager\n# DO NOT TOUCH\n"
 
 def parse(path):
     config_parsed = parser.ConfigParser()
@@ -25,9 +25,21 @@ def post_parse(config_obj):
             config_dict[section] = config_obj.items(section)
     return config_dict
 
+def print_commands(command_string):
+    command_list = command_string.split('|||')
+    for command in command_list:
+        print "$", command.lstrip()
+    
+
 def print_values(dict_item):
+    commands_index = None
     for values in dict_item:
-        print "{} = {}".format(values[0], values[1])
+        if values[0] != 'commands':
+            print "{} = {}".format(values[0], values[1])
+        else:
+            commands_index = dict_item.index(values)
+    if commands_index != None:
+        print_commands(dict_item[commands_index][1])
     print "--"
 
 def print_rest(config_dict):
@@ -37,8 +49,8 @@ def print_rest(config_dict):
             print_values(config_dict[section])
         elif section == 'modes':
             for mode in config_dict['modes'].keys():
-                print "%% {}".format(mode)
-                print_values(config_dict['modes'][mode])
+                    print "%% {}".format(mode)
+                    print_values(config_dict['modes'][mode])
         elif section == 'settings':
             pass
 
