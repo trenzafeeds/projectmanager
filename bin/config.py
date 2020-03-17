@@ -28,7 +28,7 @@ def post_parse(config_obj):
 def print_commands(command_string):
     command_list = command_string.split('|||')
     for command in command_list:
-        print "$", command.lstrip()
+        print "$$", command.lstrip()
     
 
 def print_values(dict_item):

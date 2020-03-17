@@ -24,6 +24,6 @@ conf load_config(char *cpath);
 FILE *open_file(char *fpath, char *action);
 
 void print_error(char *msg);
-void app_error(char *msg, int exit);
+void app_error(char *msg, int exit_code);
 
 #endif /* UTILS_HEADER */

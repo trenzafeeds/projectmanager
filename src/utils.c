@@ -6,14 +6,13 @@
  * guthrie@marlboro.edu
  ***********************/
 
-#include 'projectmanager.h'
+#include "projectmanager.h"
 
 conf conf_struct()
 {
   conf cptr;
-  if ((cptr = malloc(CONF_SIZE)) == NULL){
+  if ((cptr = malloc(CONF_SIZE)) == NULL)
     print_error("");
-  }
   return cptr;
 }
 
@@ -36,10 +35,10 @@ void print_errno(char *msg)
   exit(1);
 }
 
-void app_error(char *msg, int exit)
+void app_error(char *msg, int exit_code)
 {
   fprintf(stdout, "%s\n", msg);
-  if (exit)
-    exit(1);
+  if (exit_code)
+    exit(exit_code);
   return;
 }

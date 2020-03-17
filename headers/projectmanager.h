@@ -15,15 +15,16 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include <sys/stat.h>
 
 /* Local libaries */
-#include 'utils.h'
+#include "utils.h"
 
 /* Define for debugging */
 // #define DEBUG
 
 /* Define filepaths */
-// #define PM_PATH
+#define PM_PATH "/usr/share/lib/projectmanager/"
 // #define CONF_PATH
 
 #ifndef PMHEADER
@@ -31,7 +32,5 @@
 
 #define TRUE 1
 #define FALSE 0
-
-#define MAN "MANUAL ENTRY HERE"
 
 #endif /* PMHEADER */
