@@ -16,6 +16,7 @@
 #include <errno.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <regex.h>
 
 /* Local libaries */
 #include "utils.h"
@@ -25,6 +26,7 @@
 
 /* Define filepaths */
 #define PM_PATH "/usr/share/lib/projectmanager/"
+#define ICONF_SPATH ".tmp/iconf"
 // #define CONF_PATH
 
 #ifndef PMHEADER
