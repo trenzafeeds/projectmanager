@@ -9,7 +9,7 @@ case $1 in
     # No arguments
     "")
 	echo "-- project manager requires arguments --"
-	cat ${exe_path}doc/manual
+	groff -Tascii -man ${exe_path}doc/pm.1
 	exit
 	;;
 

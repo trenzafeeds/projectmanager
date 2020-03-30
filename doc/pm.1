@@ -1,0 +1,17 @@
+.\" View this file with
+.\" groff -man -Tascii pm.man
+.\"
+.TH PM 1 "MARCH 2020" Linux "User Manuals"
+.SH NAME
+pm \- create and manage project directories
+.SH SYNOPSIS
+\fBpm\fP [\fICOMMAND\fP] [\fIOPTIONS\fP]
+.SH DESCRIPTION
+\fBpm executes the \fICOMMAND\fP with \fIOPTIONS\fP.
+.TP
+\fB-c, --config [\fIfile\fB]
+Load config found at \fIfile\fP. If no argument is supplied,
+attempts to load config at $HOME/.config/projectmanager/config.conf.
+.TP
+\fB--dump_config
+Prints default config from projectmanager/doc/config.conf.
