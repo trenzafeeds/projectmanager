@@ -5,7 +5,7 @@
 ###
 
 NEWPROJECT_T = bin/fn/newproject
-NEWPROJECT_S = newproject.c utils.c
+NEWPROJECT_S = src/bin/newproject.c src/utils.c
 
 CFLAGS = -O2 -Wall -Iheaders
 
@@ -27,4 +27,4 @@ newproject: $(NEWPROJECT_O)
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 clean:
-	rm -f *.o *.d
+	rm -f src/*.o src/bin/*.o

@@ -14,15 +14,15 @@ FILE *test_args(int argcnt, char** argvars)
   if (argcnt < 3) // It's a little heart! :)
     return NULL; // Add custom error message and/or use pm to print man
   else {
-    char pdir[strlen(argv[2]) + 1];
-    if (extract_dir(argv[2], pdir)) {
+    char pdir[strlen(argvars[2]) + 1];
+    if (extract_dir(argvars[2], pdir)) {
       struct stat s;
       if (!(stat(pdir, &s) == 0 && S_ISDIR(s.st_mode)))
-	app_error("Error: invalid directory path.");
+	app_error("Error: invalid directory path.", 1);
     }
   }
   config = open_config(NULL, "r");
-  
+  return NULL;
 }
 
 int main(int argc, char** argv)

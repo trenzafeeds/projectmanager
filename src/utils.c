@@ -18,11 +18,11 @@ conf conf_struct()
 
 FILE *open_config(char *custom_path, char *action) // Usually pass NULL
 {
-  FILE *config_file
+  FILE *config_file;
   if (custom_path != NULL)
-    app_error("Custom iconf path not supported at this time.");
+    app_error("Custom iconf path not supported at this time.", 1);
   else
-    config_file = open_file(PM_PATH ICONF_PATH, action);
+    config_file = open_file(PM_PATH ICONF_SPATH, action);
   return config_file;
 }
 
@@ -33,6 +33,7 @@ conf load_config(FILE *rawconf)
 
 int mode_exists(FILE *rawconf, char *mode_name)
 {
+  return 0;
 }
 
 // dpath empty pointer for directory path
@@ -41,7 +42,7 @@ int extract_dir(char *fpath, char *dpath)
 {
   char *dptr;
   strcpy(dpath, fpath);
-  dptr = strrchr(sptr, "/");
+  dptr = strrchr(dpath, '/');
   if (dptr) {
     *dptr = '\0';
     return TRUE;
@@ -54,23 +55,24 @@ FILE *open_file(char *fpath, char *action)
 {
   FILE *fptr;
   if ((fptr = fopen(fpath, action)) == NULL)
-    print_errno("");
+    print_error("");
   return fptr;
 }
 
-void compile_regex(regex_t robject, char *pattern, int flags)
+int compile_regex(regex_t robject, char *pattern, int flags)
 {
   if (regcomp(&robject, pattern, flags) != 0)
-    app_error("Error: Regex compilation failed.");
+    app_error("Error: Regex compilation failed.", 1);
   else
-    return;
+    return 0;
 }
 
 int regex_fmatch(FILE *infile, char *pattern, int rflags)
 {
+  return 0;
 }
 
-void print_errno(char *msg)
+void print_error(char *msg)
 {
   fprintf(stdout, "%s: %s\n", strerror(errno), msg);
   exit(1);

@@ -3,3 +3,4 @@
 planning/
 bin/fn/
 .tmp/
+*.o
