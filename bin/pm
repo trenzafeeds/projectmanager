@@ -2,7 +2,7 @@
 
 # Path to symlink created by install script
 exe_path=/usr/local/lib/projectmanager/
-username=$(whoami)
+def_conf_path=/home/${USER}/.config/projectmanager/config.conf
 
 case $1 in
 
@@ -16,22 +16,31 @@ case $1 in
     # Functions
 
     # Meta utilities
-    -c | --config)     # NO SUDO: Uses $username
-	if [ -z $2 ]   # 
+    # Load config
+    -c | --config)
+	if [ ! -z $2 ]
 	then
-	    if [ -f "/home/${username}/.config/projectmanager/config.conf" ]
-	    then
-		echo "Loading config found at ~/.config/projectmanager/config.conf..."
-		python2 ${exe_path}bin/config.py /home/${username}/.config/projectmanager/config.conf >\
-			${exe_path}.tmp/iconf
-	    else
-		echo "No config found at ~/.config/projectmanager/config.conf"
-		echo "Enter path to config as second argument."
-		exit
-	    fi
+	    config_path=$2
 	else
-	    echo "Loading config found at ${2}..."
-	    python2 ${exe_path}bin/config.py $2 > ${exe_path}.tmp/iconf
+	    config_path=$def_conf_path
+	fi
+	if [ -f $config_path ]
+	then
+	    if [ -f ${exe_path}.tmp/config.compare ]
+	    then
+		if [ cmp ${config_path} ${exe_path}.tmp/config.compare ]
+		then
+		    echo "Configuration unchanged."
+		    exit 0
+		fi
+	    fi
+	    echo "Loading config found at ${config_path}..."
+	    python2 ${exe_path}bin/config.py $config_path > ${exe_path}.tmp/iconf
+	    cp $config_path ${exe_path}.tmp/config.compare
+	    exit 0
+	else
+	    echo "No config found at ${config_path}. Please enter valid config path."
+	    exit 1
 	fi
 	;;
 
