@@ -2,10 +2,54 @@
 config.py
 """
 
-import sys, os
+import sys, os, ctypes
 import ConfigParser as parser
 
-headerstring = "# .tmp/iconf\n#\n# Internal configuration file for projectmanager\n# DO NOT TOUCH\n"
+MAXSTRING = 40
+
+# To insure an exact match between struct definitions,
+# the SettingsStruct definition must be edited manually
+# in this file and src/utils.c before recompiling projectmanager.
+class SettingsStruct(ctypes.Structure):
+    global MAXSTRING
+    _fields_ = [("git", ctypes.c_int)]
+
+class SettingsData:
+
+    def __init__(self):
+        # self.settings_dict is initialized with the DEFAULT
+        # values for each setting. Default values are also
+        # used to typecheck user-entered values.
+        self.settings_dict = {"git" : 0}
+        
+        # self.settings_struct will be initialized and populated
+        # once user settings are loaded into self.settings_dict
+        self.settings_struct = None # SettingsStruct(values)
+        
+
+def writeb_open(filename):
+    try:
+        return open(filename, "wb")
+    except:
+        print "Error opening internal config file at", filename
+        exit(1)
+
+def py_to_ctype(py_var):
+    global MAXSTRING
+    if type(py_var) is int:
+        return ctypes.c_int
+    elif type(py_var) is str:
+        if len(py_var) >= MAXSTRING:
+            print "Overflow error at:"
+            print py_var
+            print "string values for variables must be", MAXSTRING, "characters or less."
+            exit(1)
+        else:
+            return (ctypes.c_char * MAXSTRING)
+    else:
+        print "Error: settings variable type error at:"
+        print py_var
+        exit(1)
 
 def parse(path):
     config_parsed = parser.ConfigParser()
@@ -25,11 +69,12 @@ def post_parse(config_obj):
             config_dict[section] = config_obj.items(section)
     return config_dict
 
+############################
+
 def print_commands(command_string):
     command_list = command_string.split('|||')
     for command in command_list:
         print "$$", command.lstrip()
-    
 
 def print_values(dict_item):
     commands_index = None
@@ -59,14 +104,18 @@ def dump_config(config_dict):
     print "%%% settings"
     print_values(config_dict['settings'])
     print_rest(config_dict)
-    
-def main(conf_path):
-    dump_config(post_parse(parse(conf_path))) 
+
+##############################
+
+def main(conf_path, iconf_path):
+    iconf_file = writeb_open(iconf_path)
+    return 0
 
 if __name__ == "__main__":
 
-    if len(sys.argv) == 1:
-        print "Enter path to config as second argument."
-        exit
+    if len(sys.argv) < 3:
+        print "Enter paths to config and iconf as arguments."
+        exit(1)
     else:
-        main(sys.argv[1]) 
+        exit(main(sys.argv[1], sys.argv[2]))
+        

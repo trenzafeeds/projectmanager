@@ -35,7 +35,7 @@ case $1 in
 		fi
 	    fi
 	    echo "Loading config found at ${config_path}..."
-	    python2 ${exe_path}bin/config.py $config_path > ${exe_path}.tmp/iconf
+	    python2 ${exe_path}bin/config.py $config_path ${exe_path}.tmp/iconf
 	    cp $config_path ${exe_path}.tmp/config.compare
 	    exit 0
 	else
