@@ -28,16 +28,18 @@ case $1 in
 	then
 	    if [ -f ${exe_path}.tmp/config.compare ]
 	    then
-		if [ cmp ${config_path} ${exe_path}.tmp/config.compare ]
+		if cmp -s ${config_path} ${exe_path}.tmp/config.compare
 		then
 		    echo "Configuration unchanged."
 		    exit 0
 		fi
 	    fi
 	    echo "Loading config found at ${config_path}..."
-	    python2 ${exe_path}bin/config.py $config_path ${exe_path}.tmp/iconf
-	    cp $config_path ${exe_path}.tmp/config.compare
-	    exit 0
+	    if python2 ${exe_path}bin/config.py $config_path ${exe_path}.tmp/iconf
+	       then
+		   cp $config_path ${exe_path}.tmp/config.compare
+		   exit 0
+	    fi
 	else
 	    echo "No config found at ${config_path}. Please enter valid config path."
 	    exit 1
