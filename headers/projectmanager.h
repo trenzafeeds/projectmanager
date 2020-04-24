@@ -25,7 +25,7 @@
 // #define DEBUG
 
 /* Define filepaths */
-#define PM_PATH "/usr/share/lib/projectmanager/"
+#define PM_PATH "/usr/local/lib/projectmanager/"
 #define ICONF_SPATH ".tmp/iconf"
 // #define CONF_PATH
 

@@ -9,14 +9,10 @@
 
 //Included in : projectmanager.h
 
+#include "settings_struct.h"
+
 #ifndef UTILS_HEADER
 #define UTILS_HEADER
-
-typedef struct _conf *conf;
-struct _conf {
-  int git;
-};
-#define CONF_SIZE sizeof(struct _conf)
 
 conf conf_struct();
 FILE *open_config(char *custom_path, char *action);
@@ -26,6 +22,7 @@ int mode_exists(FILE *rawconf, char *mode_name);
 
 int extract_dir(char *fpath, char *dpath);
 FILE *open_file(char *fpath, char *action);
+int read_bytes(void *mem, size_t size, size_t num, FILE *conf_file);
 
 int compile_regex(regex_t robject, char *pattern, int flags);
 int regex_fmatch(FILE *infile, char *pattern, int rflags);

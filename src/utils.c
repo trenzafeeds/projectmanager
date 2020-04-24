@@ -16,19 +16,11 @@ conf conf_struct()
   return cptr;
 }
 
-FILE *open_config(char *custom_path, char *action) // Usually pass NULL
+conf load_config(FILE *conf_file)
 {
-  FILE *config_file;
-  if (custom_path != NULL)
-    app_error("Custom iconf path not supported at this time.", 1);
-  else
-    config_file = open_file(PM_PATH ICONF_SPATH, action);
-  return config_file;
-}
-
-conf load_config(FILE *rawconf)
-{
-  return conf_struct();
+  conf config_struct = conf_struct();
+  read_bytes(config_struct, CONF_SIZE, 1, conf_file);
+  return config_struct;
 }
 
 int mode_exists(FILE *rawconf, char *mode_name)
@@ -57,6 +49,14 @@ FILE *open_file(char *fpath, char *action)
   if ((fptr = fopen(fpath, action)) == NULL)
     print_error("");
   return fptr;
+}
+
+int read_bytes(void *mem, size_t size, size_t num, FILE *conf_file)
+{
+  int rc;
+  if ((rc = fread(mem, size, num, conf_file)) == 0)
+    app_error("Could not struct correctly from config file.", 1);
+  return rc;
 }
 
 int compile_regex(regex_t robject, char *pattern, int flags)

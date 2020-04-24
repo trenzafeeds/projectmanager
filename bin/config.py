@@ -9,7 +9,8 @@ MAXSTRING = 40
 
 # To insure an exact match between struct definitions,
 # the STRUCT_FORM struct definition must be edited manually
-# in this file and src/utils.c before recompiling projectmanager.
+# in this file and headers/settings_struct.h
+# before recompiling projectmanager.
 STRUCT_FORM = [(("git", ctypes.c_int), 1)]
 TEMPLATE = [ option[0] for option in STRUCT_FORM ]
 DEFAULTS = { option[0][0] : option[1] for option in STRUCT_FORM }
