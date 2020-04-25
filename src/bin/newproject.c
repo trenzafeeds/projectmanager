@@ -10,7 +10,6 @@
 
 FILE *test_args(int argcnt, char** argvars)
 {
-  FILE *config;
   if (argcnt < 3) // It's a little heart! :)
     return NULL; // Add custom error message and/or use pm to print man
   else {
@@ -21,8 +20,7 @@ FILE *test_args(int argcnt, char** argvars)
 	app_error("Error: invalid directory path.", 1);
     }
   }
-  config = open_config(NULL, "r");
-  return NULL;
+  return NULL; // Must actually return opened config file
 }
 
 int main(int argc, char** argv)

@@ -42,4 +42,4 @@ printconfig: $(PRINTCONFIG_O)
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 clean:
-	rm -f src/*.o src/bin/*.o
+	rm -f src/*.o src/bin/*.o src/tests/*.o

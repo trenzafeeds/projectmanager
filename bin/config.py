@@ -11,7 +11,11 @@ MAXSTRING = 40
 # the STRUCT_FORM struct definition must be edited manually
 # in this file and headers/settings_struct.h
 # before recompiling projectmanager.
-STRUCT_FORM = [(("git", ctypes.c_int), 1)]
+STRUCT_FORM = [(("git", ctypes.c_int), 0),
+               (("git_readme", ctypes.c_int), 0),
+               (("git_ignore", ctypes.c_int), 0),
+               (("git_commit", ctypes.c_int), 0)
+               ]
 TEMPLATE = [ option[0] for option in STRUCT_FORM ]
 DEFAULTS = { option[0][0] : option[1] for option in STRUCT_FORM }
  
