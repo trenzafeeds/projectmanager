@@ -17,10 +17,12 @@ STRUCT_FORM = [(("git", ctypes.c_int), 0),
                (("git_readme", ctypes.c_int), 0),
                (("git_ignore", ctypes.c_int), 0),
                (("git_commit", ctypes.c_int), 0),
-               (("modes", (ctypes.c_char * MAXMODES) * MODENAMELEN), None)
+               (("mode_count", ctypes.c_int), 0),
+               (("modes", (ctypes.c_char * MODENAMELEN) * MAXMODES), None)
                ]
 TEMPLATE = [ option[0] for option in STRUCT_FORM ]
 DEFAULTS = { option[0][0] : option[1] for option in STRUCT_FORM }
+INTERNAL_ONLY = ["mode_count", "modes"]
  
 class SettingsStruct(ctypes.Structure):
     global MAXSTRING
@@ -72,16 +74,27 @@ class SettingsData:
                 
         return error_count
 
+    def add_defaults(self, arg_list):
+        global MAXMODES
+        global MODENAMELEN
+        modec = len(self.full_dict['modes'].keys())
+        c_modes = make_char_array(self.full_dict['modes'].keys(),\
+                                  MODENAMELEN, MAXMODES)
+        print c_modes[0].value
+        print c_modes[1].value
+        arg_list.append(modec)
+        arg_list.append(c_modes)
+        return 0
+
     def gen_struct(self):
         global TEMPLATE
+        global INTERNAL_ONLY
         struct_args = []
         for field in TEMPLATE:
-            if field[0] != "modes":
+            if field[0] not in INTERNAL_ONLY:
                 struct_args.append(self.settings_dict[field[0]])
-        # these are the modes
-        c_modes = make_char_array(self.full_dict['modes'].keys(),\
-                                  MAXMODES, MODENAMELEN)
-        struct_args.append(c_modes)
+        # Now add mode count and mode list
+        self.add_defaults(struct_args)
         try:
             self.struct_obj = SettingsStruct(*struct_args)
         except:
