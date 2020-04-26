@@ -1,1 +1,7 @@
 #!/bin/bash
+
+# Make symlink
+
+# Make directories
+[ ! -d bin/fn ] && mkdir -p bin/fn
+[ ! -d .tmp ] && mkdir -p .tmp

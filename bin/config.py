@@ -6,6 +6,8 @@ import sys, os, ctypes
 import ConfigParser as parser
 
 MAXSTRING = 40
+MAXMODES = 20
+MODENAMELEN = 15
 
 # To insure an exact match between struct definitions,
 # the STRUCT_FORM struct definition must be edited manually
@@ -14,7 +16,8 @@ MAXSTRING = 40
 STRUCT_FORM = [(("git", ctypes.c_int), 0),
                (("git_readme", ctypes.c_int), 0),
                (("git_ignore", ctypes.c_int), 0),
-               (("git_commit", ctypes.c_int), 0)
+               (("git_commit", ctypes.c_int), 0),
+               (("modes", (ctypes.c_char * MAXMODES) * MODENAMELEN), None)
                ]
 TEMPLATE = [ option[0] for option in STRUCT_FORM ]
 DEFAULTS = { option[0][0] : option[1] for option in STRUCT_FORM }
@@ -32,12 +35,16 @@ class SettingsData:
         # used to typecheck user-entered values.
         global DEFAULTS
         self.settings_dict = DEFAULTS
+
+        self.full_dict = None
         
         # self.settings_struct will be initialized and populated
         # once user settings are loaded into self.settings_dict
         self.struct_obj = None # SettingsStruct(values)
 
-    def read_input(self, config):
+    def read_input(self, full_dict):
+        self.full_dict = full_dict
+        config = full_dict['settings']
         error_count = 0
         for field in config.keys():
             try:
@@ -69,7 +76,12 @@ class SettingsData:
         global TEMPLATE
         struct_args = []
         for field in TEMPLATE:
-            struct_args.append(self.settings_dict[field[0]])
+            if field[0] != "modes":
+                struct_args.append(self.settings_dict[field[0]])
+        # these are the modes
+        c_modes = make_char_array(self.full_dict['modes'].keys(),\
+                                  MAXMODES, MODENAMELEN)
+        struct_args.append(c_modes)
         try:
             self.struct_obj = SettingsStruct(*struct_args)
         except:
@@ -103,6 +115,12 @@ def py_to_ctype(py_var):
         print py_var
         exit(1)
 
+def make_char_array(pylist, wordc, letterc):
+    arr = ((ctypes.c_char * wordc) * letterc)()
+    for i in xrange(len(pylist)):
+        arr[i].value = pylist[i]
+    return arr
+
 def options_dict(parser, section):
     optionsd = {}
     for option in parser.options(section):
@@ -125,8 +143,11 @@ def post_parse(config_obj):
     for section in config_obj.sections():
         if section[0:5] == 'mode/':
             config_dict['modes'][section[5:]] = config_obj.items(section)
-        else:
+        elif section == 'settings':
             config_dict[section] = options_dict(config_obj, section)
+        else:
+            print "Error: unknown section", section, "not valid."
+            exit(1)
     return config_dict
 
 ########################################
@@ -134,7 +155,7 @@ def post_parse(config_obj):
 def main(conf_path, iconf_path):
     config_dict = post_parse(parse(conf_path))
     settings = SettingsData()
-    rc = settings.read_input(config_dict['settings'])
+    rc = settings.read_input(config_dict)
     print "Read config with", rc, "errors."
     settings.gen_struct()
     iconf_file = writeb_open(iconf_path)
