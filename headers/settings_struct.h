@@ -5,6 +5,7 @@
 #ifndef SETTINGS_STRUCT
 #define SETTINGS_STRUCT
 
+#define MAXSTRING 100
 #define MAXMODES 20
 #define MODENAMELEN 15
 
@@ -17,6 +18,14 @@ struct _conf {
   int mode_count;
   char modes[MAXMODES][MODENAMELEN];
 };
-#define CONF_SIZE sizeof(struct _conf)
+#define CONF_SIZE sizeof(struct _conf);
+
+typedef struct _mode_p *mode_p;
+struct _mode_p {
+  int special;
+  char name[MAXSTRING];
+  char val[MAXSTRING];
+};
+#define MODE_P_SIZE sizeof(struct _mode_p);
 
 #endif /* SETTINGS_STRUCT */

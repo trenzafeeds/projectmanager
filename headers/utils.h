@@ -20,6 +20,7 @@ int load_config(FILE *rawconf, conf struct_ptr);
 
 int extract_dir(char *fpath, char *dpath, char *fname);
 int get_dir(char *path, char *pdir, char *pname);
+int file_exists(char *fname);
 FILE *open_file(char *fpath, char *action);
 int read_bytes(void *mem, size_t size, size_t num, FILE *conf_file);
 

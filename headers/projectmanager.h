@@ -27,6 +27,8 @@
 /* Define filepaths */
 #define PM_PATH "/usr/local/lib/projectmanager/"
 #define ICONF_SPATH ".tmp/iconf"
+
+#define TMP ".tmp/"
 // #define CONF_PATH
 
 #ifndef PMHEADER

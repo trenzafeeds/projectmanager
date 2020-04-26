@@ -58,6 +58,12 @@ int get_dir(char *path, char *pdir, char *pname)
   return 0;
 }
 
+int file_exists(char *fname)
+{
+  struct stat s;
+  return (stat(fname, &s) == 0);
+}
+
 FILE *open_file(char *fpath, char *action)
 {
   FILE *fptr;

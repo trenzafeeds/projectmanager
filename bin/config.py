@@ -5,7 +5,7 @@ config.py
 import sys, os, ctypes
 import ConfigParser as parser
 
-MAXSTRING = 40
+MAXSTRING = 100
 MAXMODES = 20
 MODENAMELEN = 15
 
@@ -23,11 +23,21 @@ STRUCT_FORM = [(("git", ctypes.c_int), 0),
 TEMPLATE = [ option[0] for option in STRUCT_FORM ]
 DEFAULTS = { option[0][0] : option[1] for option in STRUCT_FORM }
 INTERNAL_ONLY = ["mode_count", "modes"]
- 
+
+# Apply the same editing rules as STRUCT_FORM to MODE_P_FORM
+MODE_P_FORM = [(("special", ctypes.c_int), 0),
+               (("name", ctypes.c_char * MAXSTRING), None),
+               (("val", ctypes.c_char * MAXSTRING), None)
+               ]
+MODE_P_TEMPLATE = [ option[0] for option in MODE_P_FORM ]
+
 class SettingsStruct(ctypes.Structure):
-    global MAXSTRING
     global TEMPLATE
     _fields_ = TEMPLATE
+
+class ModePStruct(ctypes.Structure):
+    global MODE_P_TEMPLATE
+    _fields_ = MODE_P_TEMPLATE
 
 class SettingsData:
 
@@ -80,8 +90,6 @@ class SettingsData:
         modec = len(self.full_dict['modes'].keys())
         c_modes = make_char_array(self.full_dict['modes'].keys(),\
                                   MODENAMELEN, MAXMODES)
-        print c_modes[0].value
-        print c_modes[1].value
         arg_list.append(modec)
         arg_list.append(c_modes)
         return 0
@@ -101,6 +109,33 @@ class SettingsData:
             print "Error creating ctypes setting struct."
             exit(1)
         return 0
+
+class ModesData:
+
+    def __init__(self):
+        self.count = 0
+        self.mode_objs = {}
+
+    def read_input(self, modes_dict):
+        ret = 0
+        self.modes_dict = modes_dict
+        return ret
+
+    def gen_struct(self):
+        for rawmode in self.modes_dict.keys():
+            self.mode_objs[rawmode] = Mode(self.modes_dict[rawmode])
+
+class Mode:
+
+    def __init__(self, pair_list):
+        self.pairs = pair_list
+        self.p_structs = []
+        for pair in self.pairs:
+            self.p_structs.append(ModePStruct(0,\
+                                              pair[0].format('utf-8'),\
+                                              pair[1].format('utf-8')))
+        self.size = len(self.p_structs)
+        
     
 ######################################################
 
@@ -168,8 +203,12 @@ def post_parse(config_obj):
 def main(conf_path, iconf_path):
     config_dict = post_parse(parse(conf_path))
     settings = SettingsData()
+    modes = ModesData()
     rc = settings.read_input(config_dict)
+    rc += modes.read_input(config_dict['modes'])
     print "Read config with", rc, "errors."
+    # Must determine/insert mode pair counts BEFORE HERE
+    modes.gen_struct()
     settings.gen_struct()
     iconf_file = writeb_open(iconf_path)
     print "Writing updated configuration to iconf file..."
