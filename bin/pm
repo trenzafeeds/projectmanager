@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Path to symlink created by install script
-exe_path=/usr/local/lib/projectmanager/
+true_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+exe_path="${true_path}/../"
 def_conf_path=/home/${USER}/.config/projectmanager/config.conf
 
 case $1 in

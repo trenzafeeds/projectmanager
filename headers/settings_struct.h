@@ -18,7 +18,7 @@ struct _conf {
   int mode_count;
   char modes[MAXMODES][MODENAMELEN];
 };
-#define CONF_SIZE sizeof(struct _conf);
+#define CONF_SIZE sizeof(struct _conf)
 
 typedef struct _mode_p *mode_p;
 struct _mode_p {

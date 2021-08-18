@@ -5,13 +5,16 @@
 # Adapted from a Makefile by Jim Mahoney
 ###
 
+# NEED CURRENT DIR
+PM_DIR=$(shell pwd)
+
 NEWPROJECT_T = bin/fn/newproject
 NEWPROJECT_S = src/bin/newproject.c src/utils.c
 
 PRINTCONFIG_T = bin/fn/printconfig
 PRINTCONFIG_S = src/tests/printconfig.c src/utils.c
 
-CFLAGS = -O2 -Wall -Iheaders
+CFLAGS = -O2 -Wall -Iheaders -DWORK_DIR=$(PM_DIR)
 
 CC = gcc
 
@@ -21,6 +24,7 @@ NEWPROJECT_O = $(NEWPROJECT_S:.c=.o)
 PRINTCONFIG_O = $(PRINTCONFIG_S:.c=.o)
 
 all:
+	echo ${PM_DIR}
 	make projectmanager
 	make tests
 

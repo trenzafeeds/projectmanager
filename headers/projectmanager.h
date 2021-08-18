@@ -21,13 +21,24 @@
 /* Local libaries */
 #include "utils.h"
 
+/* String macros */
+#define STR(x) #x
+#define XSTR(x) STR(x)
+
+/* Check if path to working directory defined by Makefile, 
+ * then stringize it 
+ */
+#ifndef WORK_DIR
+#error "Path to local directory not defined. Read Makefile for information."
+#endif
+
+#define PM_PATH XSTR(WORK_DIR)
+
 /* Define for debugging */
 // #define DEBUG
 
 /* Define filepaths */
-#define PM_PATH "/usr/local/lib/projectmanager/"
 #define ICONF_SPATH ".tmp/iconf"
-
 #define TMP ".tmp/"
 // #define CONF_PATH
 

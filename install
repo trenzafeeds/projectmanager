@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# Make symlink
-
 # Make directories
 [ ! -d bin/fn ] && mkdir -p bin/fn
 [ ! -d .tmp ] && mkdir -p .tmp
+[ ! -d /home/${USER}/.config ] && mkdir /home/${USER}/.config
+[ ! -d /home/${USER}/.config/projectmanager ] && mkdir /home/${USER}/.config/projectmanager
+[ ! -f /home/${USER}/.config/projectmanager/config.conf ] && cp ./doc/config-template.conf /home/${USER}/.config/projectmanager/config.conf
